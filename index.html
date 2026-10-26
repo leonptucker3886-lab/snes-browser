@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SNES Browser Emulator</title>
+<style>body{margin:0;background:#18181B;color:#FAFAF9;font-family:system-ui,sans-serif;text-align:center}header{padding:20px}h1{margin:0 0 8px}#drop{max-width:640px;margin:20px auto;padding:40px 20px;border:2px dashed #6b6bd6;border-radius:12px;cursor:pointer}#drop.over{background:#2a2a40}#game{width:100%;max-width:960px;height:min(72vh,720px);margin:0 auto}small{color:#aaa;display:block;padding:16px}</style></head>
+<body><header><h1>🎮 SNES in your browser</h1><p>Load a Super Nintendo ROM you own (.smc, .sfc, .zip). It runs locally — nothing is uploaded.</p></header>
+<div id="drop">Click or drop a ROM file here<input id="f" type="file" accept=".smc,.sfc,.fig,.swc,.zip,.7z" hidden></div>
+<div id="game"></div>
+<small>Controls: arrows = D-pad, Z/X = B/A, A/S = Y/X, Q/E = L/R, Enter = Start, Shift = Select. Gamepads supported. Remap and save states in the emulator menu. Powered by EmulatorJS (snes9x core). No ROMs included.</small>
+<script>
+const d=document.getElementById('drop'),f=document.getElementById('f');
+d.onclick=()=>f.click();
+d.ondragover=e=>{e.preventDefault();d.classList.add('over')};
+d.ondragleave=()=>d.classList.remove('over');
+d.ondrop=e=>{e.preventDefault();d.classList.remove('over');if(e.dataTransfer.files[0])start(e.dataTransfer.files[0])};
+f.onchange=()=>f.files[0]&&start(f.files[0]);
+function start(file){d.remove();
+window.EJS_player='#game';window.EJS_core='snes';window.EJS_gameName=file.name.replace(/\.[^.]+$/,'');
+window.EJS_gameUrl=URL.createObjectURL(file);window.EJS_pathtodata='https://cdn.emulatorjs.org/stable/data/';
+window.EJS_startOnLoaded=true;window.EJS_color='#6b6bd6';
+const s=document.createElement('script');s.src='https://cdn.emulatorjs.org/stable/data/loader.js';document.body.appendChild(s);}
+</script></body></html>
